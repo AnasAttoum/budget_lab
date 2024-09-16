@@ -1,0 +1,67 @@
+.back1,.back2{
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+.back1{
+    background-image: url('../../public/images/increase.png');
+}
+.back2{
+    background-image: url('../../public/images/decrease.png');
+}
+
+.edit{
+    background-color: var(--primary);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.edit::before,.edit::after{
+    content: '';
+    position: absolute;
+    transform: rotate(25deg);
+    background-color: var(--secondary);
+    width: 120%;
+    height: 100%;
+}
+.edit::before{
+    top: 16px;
+    left: -100px;
+}
+.edit::after{
+    top: -16px;
+    right: -100px;
+}
+
+.edit:hover{
+    color: var(--primary);
+    z-index: 0;
+    transition: all .3s;
+}
+.edit:hover::before{
+    transition: all .3s;
+    left: -10px;
+    z-index: -1;
+}
+.edit:hover::after{
+    transition: all .3s;
+    right: -10px;
+    z-index: -1;
+}
+
+
+
+/* Basic Select */
+@media (width<375px) {
+    .container{
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-block: 20px !important;
+    }
+    .paper{
+        border-radius: 0 !important;
+    }
+    .select{
+        width: 100px !important;
+    }
+}
