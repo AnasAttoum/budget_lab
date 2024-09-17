@@ -37,7 +37,7 @@ const theme = createTheme({
 
 export default function AddTransaction() {
 
-    const transactions = useSelector((state: RootState) => state.reducers.transactions)
+    const { transactions, balance } = useSelector((state: RootState) => state.reducers.transactions)
     const [data, setData] = useState<transaction>({
         income: false,
         amount: 0,
@@ -67,14 +67,11 @@ export default function AddTransaction() {
 
     const handleEdit = () => {
         if (data !== undefined && data !== null)
-            if (false) {
-                // if (!data.income) {}
-                // FOR LATER check the balance
-                // setWarning('Your balance doesn’t allow you to make this transaction')
-            }
-            else if (data.amount <= 0 || isNaN(data.amount)) {
+            if (data.amount <= 0 || isNaN(data.amount)) {
                 setWarning('Invalid amount')
-                console.log('first')
+            }
+            else if (!data.income && balance < data.amount) {
+                setWarning('Your balance doesn’t allow you to make this transaction')
             }
             else if (data.category.length === 0) {
                 setWarning('Invalid category')
@@ -87,7 +84,8 @@ export default function AddTransaction() {
             }
             else {
                 setWarning('')
-                dispatch(addTransaction({ id: transactions[transactions.length - 1]?.id || 1 + 1, ...data }))
+                const lastTransaction = transactions.length > 0 ? transactions[transactions.length - 1] : { id: 0 };
+                dispatch(addTransaction({ id: (lastTransaction?.id || 0) + 1, ...data }))
                 navigate('/transactions')
             }
 
@@ -96,7 +94,7 @@ export default function AddTransaction() {
     return (
         <div className={`m-5 p-5 ${styles.container}`}>
             <Box sx={{ width: '100%' }}>
-                <Paper className={styles.paper} sx={data?.income ? { width: '100%', mb: 2, padding: '20px', backgroundColor: '#06d6a010' } : { width: '100%', mb: 2, padding: '20px', boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset', borderRadius: '20px', backgroundColor: '#e6394610' }}>
+                <Paper className={styles.paper} sx={data?.income ? { width: '100%', mb: 2, padding: '20px', boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset', borderRadius: '20px', backgroundColor: '#06d6a010' } : { width: '100%', mb: 2, padding: '20px', boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset', borderRadius: '20px', backgroundColor: '#e6394610' }}>
                     <Typography
                         sx={{ flex: '1 1 100%', textAlign: 'center', color: 'var(--primary)' }}
                         variant="h4"
@@ -108,8 +106,8 @@ export default function AddTransaction() {
 
                     <div className={`${data.income ? styles.back1 : styles.back2} flex flex-col justify-center items-center my-5`}>
 
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth style={{ width: '50vw', marginBlock: '20px' }}>
+                        <Box sx={{ minWidth: 120 }} className={styles.input}>
+                            <FormControl fullWidth style={{ width: '50vw', marginBlock: '20px' }} className={styles.input}>
                                 <InputLabel id="demo-simple-select-label"
                                     sx={{
                                         color: 'var(--primary)',
@@ -152,7 +150,7 @@ export default function AddTransaction() {
                                     <MenuItem value={'income'}>
                                         <div className="flex gap-2">
                                             <div>Income</div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#06d6a0" className="size-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="var(--income)" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
                                             </svg>
                                         </div>
@@ -160,7 +158,7 @@ export default function AddTransaction() {
                                     <MenuItem value={'expense'} >
                                         <div className="flex gap-2">
                                             <div>Expense</div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#e63946" className="size-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="var(--expense)" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181" />
                                             </svg>
                                         </div>
@@ -175,6 +173,7 @@ export default function AddTransaction() {
                                 disablePortal
                                 options={categories}
                                 sx={{ width: '50vw' }}
+                                className={styles.input}
                                 value={data.category}
                                 onChange={(_e, value) => {
                                     setData(prev => {
@@ -220,6 +219,7 @@ export default function AddTransaction() {
                                             },
 
                                         }}
+                                        className={styles.input}
                                         onChange={(e) => {
                                             if (e?.toISOString()) {
                                                 setData(prev => {

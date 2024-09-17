@@ -1,0 +1,11 @@
+@media (width<975px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container>div,
+    .card {
+        width: 95vw !important;
+    }
+}

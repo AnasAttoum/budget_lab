@@ -7,11 +7,22 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { links, subLinks } from '../constants/data';
 import Header from './Header';
+import Footer from './Footer';
+import { useSelector } from 'react-redux';
+import { RootState } from '../lib/store';
 
 export default function LeftDrawer() {
+
+  const {initialBalance} = useSelector((state:RootState)=>state.reducers.transactions)
+  const navigate=useNavigate()
+  React.useEffect(()=>{
+    if(initialBalance===-1){
+      navigate('/')
+    }
+  },[initialBalance,navigate])
 
   const [open, setOpen] = React.useState(false);
 
@@ -69,6 +80,8 @@ export default function LeftDrawer() {
       </Drawer>
 
       <Outlet />
+
+      <Footer />
     </>
   )
 }

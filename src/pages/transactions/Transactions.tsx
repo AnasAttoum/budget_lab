@@ -242,13 +242,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 export default function Transactions() {
 
-  const transactions = useSelector((state: RootState) => state.reducers.transactions)
+  const { transactions } = useSelector((state: RootState) => state.reducers.transactions)
   const dispatch = useDispatch()
 
   const [open, setOpen] = React.useState(false);
+  const deleteId = React.useRef<number>(0);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (id: number) => {
     setOpen(true);
+    deleteId.current = id
   };
 
   const handleClose = () => {
@@ -332,7 +334,7 @@ export default function Transactions() {
   return (
     <>
 
-      <div className={`m-5 p-5 ${styles.container}`}>
+      <div className={`m-5 p-5 ${styles.container}`} style={{minHeight:'70vh'}}>
         <Box sx={{ width: '100%' }}>
           <Paper className={styles.paper} sx={{ width: '100%', mb: 2, padding: '20px', boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset', borderRadius: '20px' }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -340,7 +342,7 @@ export default function Transactions() {
             <div className='flex flex-col justify-center items-center gap-1'>
               <div className='flex gap-5'>
                 <BasicSelect val={filters.category} setVal={setFilters} name='Category' data={categories} />
-                <BasicSelect val={filters.type} setVal={setFilters} name='Type' data={['income', 'expence']} />
+                <BasicSelect val={filters.type} setVal={setFilters} name='Type' data={['income', 'expense']} />
               </div>
 
               <ThemeProvider theme={theme}>
@@ -418,7 +420,7 @@ export default function Transactions() {
                             tabIndex={-1}
                             key={row.id}
                             selected={isItemSelected}
-                            sx={row.income ? { backgroundColor: '#06d6a020' } : { backgroundColor: '#e6394620' }}
+                            sx={row.income ? { backgroundColor: 'var(--incomeSecondary)' } : { backgroundColor: 'var(--expenseSecondary)' }}
                           >
 
                             <TableCell
@@ -428,18 +430,17 @@ export default function Transactions() {
                               padding="none"
                             >
                               {row.income ?
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#06d6a0" className="size-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="var(--income)" className="size-6">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
                                 </svg>
 
                                 :
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#e63946" className="size-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="var(--expense)" className="size-6">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181" />
                                 </svg>
-
                               }
                             </TableCell>
-                            <TableCell align="right" style={row.income ? { color: '#06d6a0', fontWeight: '900' } : { color: '#e63946', fontWeight: '900' }}>{row.income ? <>+</> : <>-</>} {row.amount}</TableCell>
+                            <TableCell align="right" style={row.income ? { color: 'var(--income)', fontWeight: '900' } : { color: 'var(--expense)', fontWeight: '900' }}>{row.income ? <>+</> : <>-</>} {row.amount}</TableCell>
                             <TableCell align="left">{row.category}</TableCell>
                             <TableCell align="left">{row.date}</TableCell>
                             <TableCell align="left">{row.description}</TableCell>
@@ -452,12 +453,14 @@ export default function Transactions() {
                                   </Tooltip>
                                 </Link>
 
-                                <Tooltip title="Delete" className='cursor-pointer' onClick={handleClickOpen}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="#e63946" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"></path></svg>
+                                <Tooltip title="Delete" className='cursor-pointer' onClick={() => handleClickOpen(row.id)}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="var(--expense)" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"></path></svg>
                                 </Tooltip>
 
                               </div>
                             </TableCell>
+
+
                             <React.Fragment>
                               <Dialog
                                 open={open}
@@ -468,7 +471,7 @@ export default function Transactions() {
                               >
                                 <DialogTitle>{"Are you sure you want to delete this transaction?"}</DialogTitle>
                                 <DialogActions>
-                                  <Button sx={{ color: 'var(--primary)' }} onClick={() => { dispatch(deleteTransaction(row.id)); handleClose() }}>Yes</Button>
+                                  <Button sx={{ color: 'var(--primary)' }} onClick={() => { dispatch(deleteTransaction(deleteId.current)); handleClose() }}>Yes</Button>
                                   <Button sx={{ color: 'var(--primary)' }} onClick={handleClose}>No</Button>
                                 </DialogActions>
                               </Dialog>

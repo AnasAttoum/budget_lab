@@ -5,8 +5,21 @@
 :root {
     --primary: #8338ec;
     --secondary: #c9a2ff;
+    
+    --income: #06d6a0;
+    --incomeSecondary: #06d6a020;
+    --expense: #e63946;
+    --expenseSecondary: #e6394620;
 }
 
 body{
     background-color: #ddd;
+}
+
+
+.rotateAnimation{
+    transition: all 1s;
+}
+.rotateAnimation:hover{
+    transform: rotate(-360deg);
 }

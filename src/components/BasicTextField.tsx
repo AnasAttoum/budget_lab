@@ -5,6 +5,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Dispatch, SetStateAction } from 'react';
 import { transaction } from '../lib/slices/transactionSlice';
 
+import styles from '../styles/transactions.module.css'
+
 export default function BasicTextField({ val, setVal, name }: { val: string | number, setVal: Dispatch<SetStateAction<transaction>>, name: string }) {
 
     const theme = createTheme({
@@ -27,12 +29,13 @@ export default function BasicTextField({ val, setVal, name }: { val: string | nu
     return (
         <Box
             component="form"
-            sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
+            sx={{ '& > :not(style)': { m: 0, width: '25ch' } }}
+            className={styles.input}
             noValidate
             autoComplete="off"
         >
             <ThemeProvider theme={theme}>
-                <TextField style={{ width: '50vw', marginBlock: '20px', color: 'var(--primary)' }} id="outlined-basic" label={name} variant="outlined" value={val}
+                <TextField  className={styles.input} style={{ width: '50vw', marginBlock: '20px', color: 'var(--primary)' }} id="outlined-basic" label={name} variant="outlined" value={val}
                     onChange={(e) => {
                         setVal(prev => {
                             return { ...prev, [name.toLowerCase()]: e.target.value }
