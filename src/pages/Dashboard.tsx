@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import GaugeChart from "../components/charts/GaugeChart";
 import { RootState } from "../lib/store";
-import RecentTransactions from "../components/recentTransactions";
+import RecentTransactions from "../components/RecentTransactions";
 import TopCategories from "../components/TopCategories";
 
 import styles from '../styles/dashboard.module.css'
