@@ -18,6 +18,7 @@ export default function Reports() {
     const [incomeOverTime, setIncomeOverTime] = useState<number[]>([]);
     const [years, setYears] = useState<number[]>([]);
     const [year, setYear] = useState<number>(years ? years[years.length - 1] : 0);
+    const [datesExport, setDatesExport] = useState<number[]>([]);
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -89,6 +90,11 @@ export default function Reports() {
             return acc
         }, []))
 
+        setDatesExport(transactions.reduce((acc: number[], transaction) => {
+            acc[0] = Math.min(new Date(acc[0]).getTime(), new Date(transaction.date).getTime())
+            return acc
+        }, [new Date().getTime(), new Date().getTime()]))
+
 
     }, [transactions])
 
@@ -109,22 +115,23 @@ export default function Reports() {
 
     const handleExcel = () => {
         transactions.forEach((transaction) => {
-            if (transaction.income)
-                worksheetForIncomes.addRow({
-                    id: transaction.id,
-                    amount: transaction.amount,
-                    category: transaction.category,
-                    date: dayjs(transaction.date).format('ddd DD MMM YYYY').slice(0, 15),
-                    description: transaction.description,
-                });
-            else
-                worksheetForExpenses.addRow({
-                    id: transaction.id,
-                    amount: transaction.amount,
-                    category: transaction.category,
-                    date: dayjs(transaction.date).format('ddd DD MMM YYYY').slice(0, 15),
-                    description: transaction.description,
-                });
+            if (new Date(transaction.date).getTime() >= datesExport[0] && new Date(transaction.date).getTime() <= datesExport[1])
+                if (transaction.income)
+                    worksheetForIncomes.addRow({
+                        id: transaction.id,
+                        amount: transaction.amount,
+                        category: transaction.category,
+                        date: dayjs(transaction.date).format('ddd DD MMM YYYY').slice(0, 15),
+                        description: transaction.description,
+                    });
+                else
+                    worksheetForExpenses.addRow({
+                        id: transaction.id,
+                        amount: transaction.amount,
+                        category: transaction.category,
+                        date: dayjs(transaction.date).format('ddd DD MMM YYYY').slice(0, 15),
+                        description: transaction.description,
+                    });
         });
 
         workbook.xlsx.writeBuffer().then((buffer) => {
@@ -164,7 +171,7 @@ export default function Reports() {
 
             <Line xAxis={months} data={incomeOverTime} name='My incomes over time' years={years} val={year} setVal={setYear} />
 
-            <Export handleExcel={handleExcel}/>
+            <Export handleExcel={handleExcel} val={datesExport} setVal={setDatesExport} />
         </>
     )
 }
