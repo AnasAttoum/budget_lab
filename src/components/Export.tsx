@@ -21,7 +21,7 @@ export default function Export({ handleExcel, val, setVal }: { handleExcel: () =
                 <div className="font-bold text-xl mb-5" style={{ color: 'var(--primary)' }}>Export To Excel</div>
                 <div className="text-center text-lg mb-5">Save your transaction and export your Incomes & Expenses</div>
 
-                <div className='flex justify-around gap-10'>
+                <div className={`${styles.dateContainer} flex justify-around gap-10`}>
                     <ThemeProvider theme={theme}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']}>

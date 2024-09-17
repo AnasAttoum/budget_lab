@@ -46,6 +46,7 @@ export default function EditTransaction() {
         description: ''
     })
     const prevAmount = React.useRef<number>(0)
+    const prevIncome = React.useRef<boolean>()
 
     const [categories, setCategories] = React.useState<string[]>([]);
     const [warning, setWarning] = useState('')
@@ -67,6 +68,7 @@ export default function EditTransaction() {
                 description: ''
             })
             prevAmount.current = transaction?.amount || 0
+            prevIncome.current = transaction?.income
         }
     }, [transactions, id])
 
@@ -83,11 +85,12 @@ export default function EditTransaction() {
 
 
     const handleEdit = () => {
+        const prevbalance = prevIncome ? balance - parseInt(prevAmount.current.toString()) : balance + parseInt(prevAmount.current.toString())
         if (data !== undefined)
             if (data.amount <= 0 || isNaN(data.amount)) {
                 setWarning('Invalid amount')
             }
-            else if (!data.income && ((balance + parseInt(prevAmount.current.toString())) < data.amount)) {
+            else if ((data.income && (prevbalance + parseInt(data.amount.toString())) < 0) || (!data.income && (prevbalance - parseInt(data.amount.toString())) < 0)) {
                 setWarning('Your balance doesn’t allow you to make this transaction')
             }
             else if (data.category.length === 0) {

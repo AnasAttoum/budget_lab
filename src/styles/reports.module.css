@@ -55,3 +55,10 @@
         width: 95vw !important;
     }
 }
+
+@media (width<475px) {
+    .dateContainer{
+        flex-direction: column;
+        gap: 10px !important;
+    }
+}
