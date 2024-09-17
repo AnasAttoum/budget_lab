@@ -1,3 +1,46 @@
+.edit{
+    background-color: white;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    position: relative;
+    transition: all .3s;
+    overflow: hidden;
+}
+
+.edit::before,.edit::after{
+    content: '';
+    position: absolute;
+    transform: rotate(25deg);
+    background-color: var(--primary);
+    width: 120%;
+    height: 120%;
+}
+.edit::before{
+    top: 20px;
+    left: -150px;
+}
+.edit::after{
+    top: -20px;
+    right: -150px;
+}
+
+.edit:hover{
+    color: white;
+    z-index: 0;
+    transition: all .3s;
+}
+.edit:hover::before{
+    transition: all .3s;
+    left: -10px;
+    z-index: -1;
+}
+.edit:hover::after{
+    transition: all .3s;
+    right: -10px;
+    z-index: -1;
+}
+
+
 @media (width<1000px) {
     .container {
         flex-direction: column;
