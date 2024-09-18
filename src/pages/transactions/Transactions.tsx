@@ -270,7 +270,6 @@ export default function Transactions() {
   const rows = React.useMemo(() => {
 
     return transactions.filter((transaction: transaction) => {
-
       return (filters.category === '' ? true : transaction.category === filters.category) &&
         (filters.date === '' ? true : new Date(transaction.date).getTime() === new Date(filters.date).getTime()) &&
         (filters.type === '' ? true : transaction.income === (filters.type === 'income' ? true : false))

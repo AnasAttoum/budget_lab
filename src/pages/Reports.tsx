@@ -151,14 +151,14 @@ export default function Reports() {
                     label: 'Income',
                     value: transactions.reduce((acc, transaction) => {
                         if (transaction.income)
-                            return acc + transaction.amount
+                            return acc + parseInt(transaction.amount.toString())
                         else return acc + 0
                     }, 0)
                 },
                 {
                     label: 'Expense', value: transactions.reduce((acc, transaction) => {
                         if (!transaction.income)
-                            return acc + transaction.amount
+                            return acc + parseInt(transaction.amount.toString())
                         else
                             return acc + 0
                     }, 0)

@@ -10,16 +10,17 @@ export interface transaction {
 }
 
 const initialState: { initialBalance: number, balance: number, transactions: transaction[] } = {
-    initialBalance: 100,
-    balance: 1479.95,
+    initialBalance: 200,
+    balance: 379.95,
     transactions: [
         { id: 1, income: false, amount: 200, category: 'clothes', date: new Date(2023, 9, 3).toString(), description: 'Money transfer from my friend' },
         { id: 2, income: true, amount: 1000, category: 'transfer', date: new Date(2023, 10, 9).toString(), description: 'Money transfer from my friend' },
         { id: 3, income: true, amount: 500, category: 'salary', date: new Date(2024, 8, 1).toString(), description: 'September Salary' },
-        { id: 4, income: false, amount: 100, category: 'bills', date: new Date(2024, 8, 3).toString(), description: 'Electricity Bill' },
-        { id: 5, income: false, amount: 100, category: 'bills', date: new Date(2024, 8, 3).toString(), description: 'Internet Bill' },
-        { id: 6, income: true, amount: 300, category: 'extra', date: new Date(2024, 8, 3).toString(), description: 'Freelance project for a client' },
-        { id: 7, income: false, amount: 20.05, category: 'food', date: new Date(2024, 8, 3).toString(), description: 'Lunch' },
+        { id: 4, income: false, amount: 100, category: 'bills', date: new Date(2024, 8, 15).toString(), description: 'Electricity Bill' },
+        { id: 5, income: false, amount: 100, category: 'bills', date: new Date(2024, 8, 28).toString(), description: 'Internet Bill' },
+        { id: 6, income: true, amount: 300, category: 'extra', date: new Date(2024, 9, 3).toString(), description: 'Freelance project for a client' },
+        { id: 7, income: false, amount: 20.05, category: 'food', date: new Date(2024, 9, 10).toString(), description: 'Lunch' },
+        { id: 8, income: false, amount: 1200, category: 'technology', date: new Date(2024, 9, 17).toString(), description: 'New laptop' },
     ]
 }
 
